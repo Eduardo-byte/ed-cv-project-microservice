@@ -1,0 +1,27 @@
+{
+    "name": "node-swagger-users",
+    "version": "1.0.0",
+    "description": "Node.js microservice for Users with Swagger, clustering, and Supabase integration",
+    "main": "cluster.js",
+    "type": "module",
+    "scripts": {
+        "start": "node cluster.js",
+        "test": "jest",
+        "stress-test": "node --trace-warnings --experimental-vm-modules node_modules/.bin/jest tests/readOnlyStress.test.js"
+    },
+    "dependencies": {
+        "@supabase/supabase-js": "^2.0.0",
+        "axios": "^1.8.4",
+        "dotenv": "^16.3.1",
+        "express": "^4.18.2",
+        "swagger-jsdoc": "^6.2.8",
+        "swagger-ui-express": "^4.6.3"
+    },
+    "devDependencies": {
+        "@babel/core": "^7.26.9",
+        "@babel/preset-env": "^7.26.9",
+        "babel-jest": "^29.7.0",
+        "jest": "^29.7.0",
+        "supertest": "^7.0.0"
+    }
+}
