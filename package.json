@@ -1,27 +1,54 @@
 {
-    "name": "node-swagger-users",
-    "version": "1.0.0",
-    "description": "Node.js microservice for Users with Swagger, clustering, and Supabase integration",
-    "main": "cluster.js",
-    "type": "module",
-    "scripts": {
-        "start": "node cluster.js",
-        "test": "jest",
-        "stress-test": "node --trace-warnings --experimental-vm-modules node_modules/.bin/jest tests/readOnlyStress.test.js"
-    },
-    "dependencies": {
-        "@supabase/supabase-js": "^2.0.0",
-        "axios": "^1.8.4",
-        "dotenv": "^16.3.1",
-        "express": "^4.18.2",
-        "swagger-jsdoc": "^6.2.8",
-        "swagger-ui-express": "^4.6.3"
-    },
-    "devDependencies": {
-        "@babel/core": "^7.26.9",
-        "@babel/preset-env": "^7.26.9",
-        "babel-jest": "^29.7.0",
-        "jest": "^29.7.0",
-        "supertest": "^7.0.0"
-    }
+  "name": "cv-api-microservice",
+  "version": "1.0.0",
+  "description": "CV Website API Microservice - Projects and Contact Management",
+  "main": "server.js",
+  "type": "module",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "nodemon server.js",
+    "dev:cluster": "node cluster.js",
+    "prod": "NODE_ENV=production node cluster.js",
+    "test": "jest",
+    "swagger": "node swagger-generator.js"
+  },
+  "keywords": [
+    "microservice",
+    "api",
+    "nodejs",
+    "express",
+    "supabase",
+    "swagger"
+  ],
+  "author": "Eduardo Brito",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.18.2",
+    "cors": "^2.8.5",
+    "dotenv": "^16.3.1",
+    "nodemailer": "^6.9.8",
+    "@supabase/supabase-js": "^2.39.0",
+    "helmet": "^7.1.0",
+    "morgan": "^1.10.0",
+    "winston": "^3.11.0",
+    "express-rate-limit": "^7.1.5",
+    "swagger-ui-express": "^5.0.0",
+    "swagger-jsdoc": "^6.2.8",
+    "joi": "^17.11.0",
+    "compression": "^1.7.4",
+    "express-validator": "^7.0.1",
+    "jsonwebtoken": "^9.0.2",
+    "bcrypt": "^5.1.1"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.2",
+    "jest": "^29.7.0",
+    "supertest": "^6.3.3",
+    "@types/jest": "^29.5.8",
+    "@types/bcrypt": "^5.0.2",
+    "@types/jsonwebtoken": "^9.0.5"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
 }
