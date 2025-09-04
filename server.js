@@ -43,7 +43,14 @@ const swaggerOptions = {
     info: {
       title: 'CV API Microservice',
       version: '1.0.0',
-      description: 'A comprehensive API for managing CV website projects and contact messages',
+      description: `A comprehensive API for managing CV website projects and contact messages.
+      
+**Authentication:**
+Protected endpoints require an API key. Click the "Authorize" button below and enter: \`MICROSERVICE-API-KEY\`
+
+**Health endpoints** are public and do not require authentication.
+**Contact endpoints** are public for form submissions.
+**Project endpoints** require API key authentication.`,
       contact: {
         name: 'Eduardo Brito',
         email: 'edbrito.luis@gmail.com'
@@ -77,6 +84,21 @@ const swaggerOptions = {
         description: 'Contact form and message management endpoints'
       }
     ],
+    components: {
+      securitySchemes: {
+        ApiKeyAuth: {
+          type: 'apiKey',
+          in: 'header',
+          name: 'x-api-key',
+          description: 'API Key for accessing protected endpoints. Use: MICROSERVICE-API-KEY'
+        }
+      }
+    },
+    security: [
+      {
+        ApiKeyAuth: []
+      }
+    ]
   },
   apis: ['./routes/*.js'], // Path to the API files
 };

@@ -130,6 +130,14 @@ LOG_LEVEL=info
 ### Swagger UI
 Access interactive API documentation at: `http://localhost:3001/api-docs`
 
+**🔐 Authentication in Swagger:**
+1. Open the Swagger UI at `http://localhost:3001/api-docs`
+2. Click the **"Authorize"** button (🔒 lock icon) at the top right
+4. Click **"Authorize"** and then **"Close"**
+5. You can now test all protected endpoints!
+
+**Note:** Health and Contact endpoints are public and don't require authentication.
+
 ### Key Endpoints
 
 #### Health Check

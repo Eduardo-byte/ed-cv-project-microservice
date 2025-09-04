@@ -111,6 +111,8 @@ const projectService = new ProjectService();
  *   get:
  *     summary: Get all projects
  *     tags: [Projects]
+ *     security:
+ *       - ApiKeyAuth: []
  *     parameters:
  *       - in: query
  *         name: type
@@ -204,6 +206,8 @@ router.get('/', async (req, res) => {
  *   get:
  *     summary: Search projects by keyword
  *     tags: [Projects]
+ *     security:
+ *       - ApiKeyAuth: []
  *     parameters:
  *       - in: query
  *         name: q
@@ -280,6 +284,8 @@ router.get('/search', async (req, res) => {
  *   get:
  *     summary: Get project statistics
  *     tags: [Projects]
+ *     security:
+ *       - ApiKeyAuth: []
  *     responses:
  *       200:
  *         description: Statistics retrieved successfully
@@ -329,6 +335,8 @@ router.get('/stats', async (req, res) => {
  *   get:
  *     summary: Get featured projects
  *     tags: [Projects]
+ *     security:
+ *       - ApiKeyAuth: []
  *     parameters:
  *       - in: query
  *         name: limit
@@ -379,6 +387,8 @@ router.get('/featured', async (req, res) => {
  *   get:
  *     summary: Get projects by type
  *     tags: [Projects]
+ *     security:
+ *       - ApiKeyAuth: []
  *     parameters:
  *       - in: path
  *         name: type
@@ -443,6 +453,8 @@ router.get('/type/:type', async (req, res) => {
  *   get:
  *     summary: Get project by ID
  *     tags: [Projects]
+ *     security:
+ *       - ApiKeyAuth: []
  *     parameters:
  *       - in: path
  *         name: id
@@ -494,6 +506,8 @@ router.get('/:id', async (req, res) => {
  *   post:
  *     summary: Create new project (Admin)
  *     tags: [Projects]
+ *     security:
+ *       - ApiKeyAuth: []
  *     requestBody:
  *       required: true
  *       content:
