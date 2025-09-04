@@ -1,0 +1,15 @@
+name: Health Monitor
+
+on:
+  schedule:
+    # Run every 10 minutes for monitoring
+    - cron: "*/10 * * * *"
+  workflow_dispatch: # Allow manual triggering
+
+jobs:
+  health-check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Monitor service health
+        run: |
+          curl -f https://ed-cv-project-microservice.onrender.com/api/v1/health/live || exit 1

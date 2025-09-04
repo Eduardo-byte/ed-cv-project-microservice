@@ -15,6 +15,7 @@ import { validateApiKey } from './middleware/apiKey.js';
 import projectRoutes from './routes/project.routes.js';
 import contactRoutes from './routes/contact.routes.js';
 import healthRoutes from './routes/health.routes.js';
+import './scripts/health-monitor.js'; // Start health monitoring service
 
 dotenv.config();
 

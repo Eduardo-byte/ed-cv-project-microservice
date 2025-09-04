@@ -149,7 +149,7 @@ router.get('/', async (req, res) => {
 
 /**
  * @swagger
- * /api/v1/health/ready:
+ * /health/ready:
  *   get:
  *     summary: Readiness probe
  *     tags: [Health]
@@ -198,7 +198,7 @@ router.get('/ready', async (req, res) => {
 
 /**
  * @swagger
- * /api/v1/health/live:
+ * /health/live:
  *   get:
  *     summary: Liveness probe
  *     tags: [Health]
