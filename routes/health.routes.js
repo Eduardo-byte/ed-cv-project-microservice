@@ -49,7 +49,7 @@ const router = express.Router();
 
 /**
  * @swagger
- * /api/v1/health:
+ * /health:
  *   get:
  *     summary: Get API health status
  *     tags: [Health]
