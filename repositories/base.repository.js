@@ -19,7 +19,6 @@ class BaseRepository {
   buildQuery(options = {}) {
     let query = this.client.from(this.tableName).select(options.select || '*');
 
-    // Apply filters
     if (options.filters) {
       Object.entries(options.filters).forEach(([key, value]) => {
         if (value !== undefined && value !== null) {
@@ -34,13 +33,11 @@ class BaseRepository {
       });
     }
 
-    // Apply sorting
     if (options.orderBy) {
       const { column, ascending = true } = options.orderBy;
       query = query.order(column, { ascending });
     }
 
-    // Apply pagination
     if (options.limit) {
       query = query.limit(options.limit);
       
@@ -294,7 +291,6 @@ class BaseRepository {
         .from(this.tableName)
         .select('*', { count: 'exact', head: true });
 
-      // Apply filters
       Object.entries(filters).forEach(([key, value]) => {
         if (value !== undefined && value !== null) {
           query = query.eq(key, value);

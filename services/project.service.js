@@ -274,8 +274,6 @@ class ProjectService {
     }
   }
 
-  // Private helper methods
-
   /**
    * Sanitize query options
    * @param {Object} options - Raw options

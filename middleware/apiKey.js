@@ -1,7 +1,6 @@
 import logger from '../config/logger.js';
 import dotenv from 'dotenv';
 
-// Load environment variables
 dotenv.config();
 
 /**
@@ -11,9 +10,7 @@ dotenv.config();
 export const validateApiKey = (req, res, next) => {
   try {
     const apiKey = req.headers['x-api-key'] || req.query.apikey;
-    console.log('apiKey', apiKey);
     const validApiKey = process.env.API_KEY;
-    console.log('validApiKey', validApiKey);
 
     if (!validApiKey) {
       logger.error('API_KEY not configured in environment variables');
@@ -23,7 +20,7 @@ export const validateApiKey = (req, res, next) => {
         message: 'API key validation not properly configured'
       });
     }
-    console.log('apiKey', apiKey);
+
     if (!apiKey) {
       logger.warn('API key missing in request', {
         ip: req.ip,
@@ -53,7 +50,6 @@ export const validateApiKey = (req, res, next) => {
       });
     }
 
-    // API key is valid, continue
     logger.info('API key validated successfully', {
       ip: req.ip,
       path: req.path
@@ -77,11 +73,11 @@ export const optionalApiKey = (req, res, next) => {
   const apiKey = req.headers['x-api-key'] || req.query.apikey;
   
   if (!apiKey) {
-    // No API key provided, but that's okay for optional routes
+    // No API key provided, continue without validation
     return next();
   }
 
-  // If API key is provided, validate it
+  // API key provided, validate it
   validateApiKey(req, res, next);
 };
 

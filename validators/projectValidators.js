@@ -1,7 +1,6 @@
 import { body } from 'express-validator';
 
 export const projectValidators = {
-  // Validation for creating a new project
   createProject: [
     body('title')
       .notEmpty()
@@ -97,7 +96,6 @@ export const projectValidators = {
       .withMessage('is_featured must be a boolean')
   ],
 
-  // Validation for updating a project
   updateProject: [
     body('title')
       .optional()

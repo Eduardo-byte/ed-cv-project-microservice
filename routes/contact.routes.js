@@ -19,7 +19,6 @@ const contactLimiter = rateLimit({
   legacyHeaders: false,
 });
 
-// Simple validation
 const contactValidation = [
   body('name')
     .trim()
@@ -109,7 +108,6 @@ router.post('/', contactLimiter, contactValidation, async (req, res) => {
   const startTime = Date.now();
   
   try {
-    // Check validation results
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       return res.status(400).json({
@@ -126,7 +124,6 @@ router.post('/', contactLimiter, contactValidation, async (req, res) => {
       subject: subject || 'Contact Form Submission'
     });
 
-    // Send email directly
     const mailOptions = {
       to: process.env.EMAIL_USER, // Send to your email
       subject: subject || `Contact Form: Message from ${name}`,

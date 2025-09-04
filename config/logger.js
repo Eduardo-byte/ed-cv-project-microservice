@@ -13,7 +13,6 @@ if (!fs.existsSync(logsDir)) {
   fs.mkdirSync(logsDir, { recursive: true });
 }
 
-// Define log format
 const logFormat = winston.format.combine(
   winston.format.timestamp({ format: 'YYYY-MM-DD HH:mm:ss' }),
   winston.format.errors({ stack: true }),
@@ -31,13 +30,11 @@ const consoleFormat = winston.format.combine(
   })
 );
 
-// Create logger instance
 const logger = winston.createLogger({
   level: process.env.LOG_LEVEL || 'info',
   format: logFormat,
   defaultMeta: { service: 'cv-api-microservice' },
   transports: [
-    // File transports
     new winston.transports.File({ 
       filename: join(logsDir, 'error.log'), 
       level: 'error',
@@ -52,14 +49,13 @@ const logger = winston.createLogger({
   ]
 });
 
-// Add console transport for development
+// Console logging in development only
 if (process.env.NODE_ENV !== 'production') {
   logger.add(new winston.transports.Console({
     format: consoleFormat
   }));
 }
 
-// Add request logging helper
 logger.logRequest = (req, res, duration) => {
   const logData = {
     method: req.method,
@@ -78,7 +74,6 @@ logger.logRequest = (req, res, duration) => {
   }
 };
 
-// Add error logging helper
 logger.logError = (error, context = {}) => {
   logger.error('Application Error', {
     message: error.message,
