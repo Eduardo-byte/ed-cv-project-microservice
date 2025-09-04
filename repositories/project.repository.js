@@ -1,4 +1,4 @@
-import BaseRepository from './BaseRepository.js';
+import BaseRepository from './base.repository.js';
 import logger from '../config/logger.js';
 
 /**

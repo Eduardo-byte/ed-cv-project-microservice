@@ -1,4 +1,4 @@
-import ProjectRepository from '../repositories/ProjectRepository.js';
+import ProjectRepository from '../repositories/project.repository.js';
 import logger from '../config/logger.js';
 
 /**

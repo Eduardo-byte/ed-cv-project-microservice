@@ -1,5 +1,5 @@
 import express from 'express';
-import ProjectService from '../services/ProjectService.js';
+import ProjectService from '../services/project.service.js';
 import { validationResult } from 'express-validator';
 import { projectValidators } from '../validators/projectValidators.js';
 import logger from '../config/logger.js';
@@ -165,7 +165,6 @@ const projectService = new ProjectService();
  */
 router.get('/', async (req, res) => {
   const startTime = Date.now();
-  console.log("GET /api/v1/projects");
   try {
     logger.info('GET /api/v1/projects', { query: req.query });
 

@@ -1,8 +1,30 @@
 # CV API Microservice
 
-A comprehensive Node.js microservice for managing CV website projects and contact messages. Built with Express.js, Supabase, and following enterprise-level architecture patterns.
+[![Node.js](https://img.shields.io/badge/Node.js-18+-green.svg)](https://nodejs.org/)
+[![Express.js](https://img.shields.io/badge/Express.js-4.18+-blue.svg)](https://expressjs.com/)
+[![Supabase](https://img.shields.io/badge/Supabase-Database-green.svg)](https://supabase.com/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](http://makeapullrequest.com)
 
-## Features
+> A comprehensive Node.js microservice for managing CV/portfolio website projects and contact messages. Built with Express.js, Supabase, and following enterprise-level architecture patterns.
+
+## 📖 Table of Contents
+
+- [✨ Features](#-features)
+- [🚀 Quick Start](#-quick-start)
+- [⚙️ Configuration](#️-configuration)
+- [📚 API Documentation](#-api-documentation)
+- [🏗️ Architecture](#️-architecture)
+- [🔧 Development](#-development)
+- [🚀 Deployment](#-deployment)
+- [📊 Monitoring](#-monitoring)
+- [🔒 Security](#-security)
+- [🤝 Contributing](#-contributing)
+- [🔧 Tech Stack](#-tech-stack)
+- [📄 License](#-license)
+- [📞 Support](#-support)
+
+## ✨ Features
 
 ### 🏗️ Architecture
 - **Layered Architecture**: Routes → Services → Repositories pattern
@@ -28,7 +50,7 @@ A comprehensive Node.js microservice for managing CV website projects and contac
 - **Comprehensive Logging**: Winston-based structured logging
 - **Error Handling**: Global error handling with detailed responses
 
-## Quick Start
+## 🚀 Quick Start
 
 ### Prerequisites
 - Node.js 18+ 
@@ -37,23 +59,29 @@ A comprehensive Node.js microservice for managing CV website projects and contac
 
 ### Installation
 
-1. **Clone and install dependencies**
+1. **Clone the repository and install dependencies**
 ```bash
-cd api
+git clone https://github.com/Eduardo-byte/cv-api-microservice.git
+cd cv-api-microservice
 npm install
 ```
 
 2. **Environment Configuration**
 ```bash
-cp .env.example .env
+# Create your .env file with the following variables:
+cp .env.example .env  # (create .env.example first with the template below)
 # Edit .env with your configuration
 ```
 
+**Required Environment Variables:**
+Create a `.env` file with these variables (see Configuration section below for complete list).
+
 3. **Database Setup**
 ```bash
-# Run the SQL schemas in your Supabase database
-cat database/projects_schema.sql | supabase db sql
-cat database/contact_schema.sql | supabase db sql
+# Run the SQL schema in your Supabase database
+# Copy and paste the content of database/projects_schema.sql into your Supabase SQL editor
+# Or use the Supabase CLI:
+supabase db sql < database/projects_schema.sql
 ```
 
 4. **Start the service**
@@ -65,7 +93,7 @@ npm run dev
 npm run prod
 ```
 
-## Configuration
+## ⚙️ Configuration
 
 ### Environment Variables
 
@@ -87,15 +115,17 @@ API_VERSION=v1
 RATE_LIMIT_WINDOW_MS=900000
 RATE_LIMIT_MAX_REQUESTS=100
 
-# Security
-JWT_SECRET=your_jwt_secret_here
+# CORS Configuration
 CORS_ORIGINS=http://localhost:5173,http://localhost:3000
+
+# API Security (optional)
+API_KEY=your_api_key_here
 
 # Logging
 LOG_LEVEL=info
 ```
 
-## API Documentation
+## 📚 API Documentation
 
 ### Swagger UI
 Access interactive API documentation at: `http://localhost:3001/api-docs`
@@ -123,41 +153,32 @@ POST   /api/v1/projects                    # Create project (admin)
 #### Contact
 ```
 POST   /api/v1/contact                     # Submit contact form
-GET    /api/v1/contact/messages            # Get messages (admin)
-GET    /api/v1/contact/messages/stats      # Get contact stats (admin)
-GET    /api/v1/contact/messages/search     # Search messages (admin)
-GET    /api/v1/contact/messages/:id        # Get message by ID (admin)
-PATCH  /api/v1/contact/messages/:id/reply  # Mark as replied (admin)
 ```
 
-## Architecture
+## 🏗️ Architecture
 
 ### Project Structure
 ```
-api/
+cv-api-microservice/
 ├── config/                 # Configuration files
 │   ├── database.js         # Supabase configuration
 │   ├── email.js           # Email service configuration
 │   └── logger.js          # Winston logging configuration
 ├── middleware/             # Express middleware
-│   └── auth.js            # Authentication middleware
+│   └── apiKey.js          # API key validation middleware
 ├── repositories/           # Data access layer
-│   ├── BaseRepository.js   # Base repository with CRUD operations
-│   ├── ProjectRepository.js # Project data operations
-│   └── ContactRepository.js # Contact data operations
+│   ├── base.repository.js   # Base repository with CRUD operations
+│   └── project.repository.js # Project data operations
 ├── services/              # Business logic layer
-│   ├── ProjectService.js   # Project business logic
-│   └── ContactService.js   # Contact business logic
+│   └── project.service.js   # Project business logic
 ├── routes/                # API routes
-│   ├── projectRoutes.js   # Project endpoints
-│   ├── contactRoutes.js   # Contact endpoints
-│   └── healthRoutes.js    # Health check endpoints
+│   ├── project.routes.js   # Project endpoints
+│   ├── contact.routes.js   # Contact endpoints
+│   └── health.routes.js    # Health check endpoints
 ├── validators/            # Request validation
-│   ├── projectValidators.js
-│   └── contactValidators.js
+│   └── projectValidators.js
 ├── database/              # Database schemas
-│   ├── projects_schema.sql
-│   └── contact_schema.sql
+│   └── projects_schema.sql
 ├── logs/                  # Application logs
 ├── cluster.js             # Clustering configuration
 ├── server.js              # Main application file
@@ -170,7 +191,7 @@ Request → Routes → Validators → Services → Repositories → Database
 Response ← Routes ← Services ← Repositories ← Database
 ```
 
-## Development
+## 🔧 Development
 
 ### Available Scripts
 ```bash
@@ -178,8 +199,8 @@ npm start          # Start production server
 npm run dev        # Start development server with nodemon
 npm run dev:cluster # Start with clustering in development
 npm run prod       # Start production server with clustering
-npm test           # Run tests
-npm run swagger    # Generate swagger documentation
+npm test           # Run tests (not configured yet)
+npm run lint       # Run linter (not configured yet)
 ```
 
 ### Development Features
@@ -188,7 +209,14 @@ npm run swagger    # Generate swagger documentation
 - **Error Stack Traces**: Full error details in development mode
 - **Swagger UI**: Interactive API testing interface
 
-## Production Deployment
+## 🚀 Deployment
+
+### Environment Setup
+Make sure to set all required environment variables in production:
+- Database credentials (Supabase)
+- Email service credentials  
+- API keys and security settings
+- CORS origins for your domain
 
 ### Docker Deployment
 ```dockerfile
@@ -209,7 +237,7 @@ CMD ["npm", "run", "prod"]
 - **Security Headers**: Comprehensive security middleware
 - **Rate Limiting**: Protection against abuse
 
-## Monitoring & Logging
+## 📊 Monitoring & Logging
 
 ### Health Monitoring
 - **Health Status**: Overall service health with dependency checks
@@ -223,7 +251,7 @@ CMD ["npm", "run", "prod"]
 - **File Rotation**: Automatic log file rotation
 - **Request Logging**: Detailed HTTP request/response logging
 
-## Security
+## 🔒 Security
 
 ### Implemented Security Measures
 - **Input Validation**: Comprehensive request validation
@@ -234,36 +262,83 @@ CMD ["npm", "run", "prod"]
 - **XSS Protection**: Input sanitization
 - **Spam Detection**: Contact form spam filtering
 
-### Authentication (Optional)
-- **JWT Support**: Token-based authentication
-- **API Key Support**: Service-to-service authentication
-- **Role-based Access**: Admin-only endpoints
+### API Authentication
+- **API Key Support**: Service-to-service authentication for protected endpoints
+- **Configurable**: Easy to extend with JWT or other auth methods
 
-## Database Schema
+## 🗄️ Database Schema
 
 ### Projects Table
-- Full project information with metadata
-- Support for different project types (company, personal, freelance)
-- Technology stack and feature tracking
-- Featured project support
+- **Comprehensive project data**: Title, description, type, status, technologies
+- **Project types**: Company, personal, freelance projects
+- **Rich metadata**: GitHub URLs, live URLs, images, metrics
+- **Featured projects**: Priority and featured status support
+- **Search & filtering**: Full-text search capabilities
 
-### Contact Messages Table  
-- Contact form submissions with status tracking
-- Email notifications and spam protection
-- Admin management capabilities
+See `database/projects_schema.sql` for the complete schema definition.
 
-## Contributing
+## 🔧 Tech Stack
 
-1. Fork the repository
-2. Create a feature branch
-3. Commit your changes
-4. Push to the branch
-5. Create a Pull Request
+### Core Technologies
+- **Runtime**: Node.js 18+
+- **Framework**: Express.js 4.18+
+- **Database**: Supabase (PostgreSQL)
+- **Email**: Nodemailer with Gmail/SMTP
+- **Documentation**: Swagger/OpenAPI 3.0
 
-## License
+### Key Dependencies
+- **Security**: Helmet, CORS, Express Rate Limit
+- **Validation**: Express Validator
+- **Logging**: Winston
+- **Process Management**: Node.js Cluster
+- **Utilities**: Compression, Morgan, Dotenv
 
-MIT License - see LICENSE file for details
+### Architecture Pattern
+- **Clean Architecture**: Layered approach (Routes → Services → Repositories)
+- **Dependency Injection**: Service and repository pattern
+- **Error Handling**: Centralized error management
+- **Configuration**: Environment-based configuration
 
-## Support
+## 🤝 Contributing
 
-For support, please contact: edbrito.luis@gmail.com
+Contributions are welcome! Please feel free to submit a Pull Request.
+
+### Development Process
+
+1. **Fork** the repository
+2. **Clone** your fork locally
+3. **Create** a feature branch (`git checkout -b feature/AmazingFeature`)
+4. **Make** your changes
+5. **Test** your changes thoroughly
+6. **Commit** your changes (`git commit -m 'Add some AmazingFeature'`)
+7. **Push** to the branch (`git push origin feature/AmazingFeature`)
+8. **Open** a Pull Request
+
+### Code Style
+- Use ES6+ features
+- Follow the existing code structure (Routes → Services → Repositories)
+- Add appropriate logging
+- Update documentation as needed
+
+### Reporting Issues
+Please use the [GitHub Issues](https://github.com/Eduardo-byte/cv-api-microservice/issues) page to report bugs or request features.
+
+## 📄 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## 📞 Support
+
+- **Email**: edbrito.luis@gmail.com
+- **GitHub Issues**: [Report a bug or request a feature](https://github.com/Eduardo-byte/cv-api-microservice/issues)
+- **Documentation**: Check the [API documentation](http://localhost:3001/api-docs) when running locally
+
+---
+
+<div align="center">
+
+**Built with ❤️ by [Eduardo Brito](https://github.com/Eduardo-byte)**
+
+[⭐ Star this repo](https://github.com/Eduardo-byte/cv-api-microservice) • [🐛 Report Bug](https://github.com/Eduardo-byte/cv-api-microservice/issues) • [✨ Request Feature](https://github.com/Eduardo-byte/cv-api-microservice/issues)
+
+</div>

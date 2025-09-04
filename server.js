@@ -17,9 +17,9 @@ import { verifyEmailConfig } from './config/email.js';
 import { validateApiKey } from './middleware/apiKey.js';
 
 // Import routes
-import projectRoutes from './routes/projectRoutes.js';
-import contactRoutes from './routes/contactRoutes.js';
-import healthRoutes from './routes/healthRoutes.js';
+import projectRoutes from './routes/project.routes.js';
+import contactRoutes from './routes/contact.routes.js';
+import healthRoutes from './routes/health.routes.js';
 
 // Load environment variables
 dotenv.config();
@@ -65,10 +65,6 @@ const swaggerOptions = {
     ],
     tags: [
       {
-        name: 'Authentication',
-        description: 'User authentication and authorization endpoints'
-      },
-      {
         name: 'Health',
         description: 'Health check endpoints'
       },
@@ -81,15 +77,6 @@ const swaggerOptions = {
         description: 'Contact form and message management endpoints'
       }
     ],
-    components: {
-      securitySchemes: {
-        bearerAuth: {
-          type: 'http',
-          scheme: 'bearer',
-          bearerFormat: 'JWT'
-        }
-      }
-    }
   },
   apis: ['./routes/*.js'], // Path to the API files
 };

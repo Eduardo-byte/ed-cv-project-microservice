@@ -16,8 +16,8 @@ if (cluster.isPrimary) {
   console.log(`📊 Primary process ${process.pid} is running`);
   console.log(`💻 CPUs available: ${numCPUs}`);
   
-  // In development, only use 1 worker for easier debugging
-  const numWorkers = isDevelopment ? 1 : Math.min(numCPUs, 4);
+  // Use 1 worker in development, 2 in production for this simple microservice
+  const numWorkers = isDevelopment ? 1 : 2;
   console.log(`👥 Starting ${numWorkers} worker${numWorkers > 1 ? 's' : ''}...`);
 
   // Fork workers
