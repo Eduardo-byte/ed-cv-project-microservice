@@ -16,7 +16,7 @@ if (HEALTH_URL) {
     try {
       const response = await fetch(HEALTH_URL);
       if (response.ok) {
-        logger.info(`Health monitor check successful (${env})`);
+        logger.info(`🩺 HEALTH CHECK OK (${env}) - ${HEALTH_URL}`);
       } else {
         logger.warn(`Health monitor check failed: ${response.status} (${env})`);
       }
@@ -25,5 +25,6 @@ if (HEALTH_URL) {
     }
   });
 
-  logger.info(`Health monitoring service started (${env}) - URL: ${HEALTH_URL}`);
+  logger.info(`🚀 HEALTH MONITORING ACTIVE (${env}) - URL: ${HEALTH_URL}`);
+  console.log(`🚀 HEALTH MONITORING ACTIVE (${env}) - URL: ${HEALTH_URL}`);
 }
