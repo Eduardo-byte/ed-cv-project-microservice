@@ -8,35 +8,26 @@ import swaggerUi from 'swagger-ui-express';
 import swaggerJsdoc from 'swagger-jsdoc';
 import dotenv from 'dotenv';
 
-// Import configuration
 import logger from './config/logger.js';
 import { testConnection } from './config/database.js';
 import { verifyEmailConfig } from './config/email.js';
-
-// Import middleware
 import { validateApiKey } from './middleware/apiKey.js';
-
-// Import routes
 import projectRoutes from './routes/project.routes.js';
 import contactRoutes from './routes/contact.routes.js';
 import healthRoutes from './routes/health.routes.js';
 
-// Load environment variables
 dotenv.config();
 
-// Constants
 const PORT = process.env.PORT || 3001;
 const API_VERSION = process.env.API_VERSION || 'v1';
 const NODE_ENV = process.env.NODE_ENV || 'development';
 const CORS_ORIGINS = process.env.CORS_ORIGINS ? process.env.CORS_ORIGINS.split(',') : ['http://localhost:5173', 'http://localhost:3000'];
 
-// Create Express application
 const app = express();
 
-// Trust proxy for accurate IP addresses
+// Trust proxy for accurate client IP detection behind load balancers
 app.set('trust proxy', 1);
 
-// Swagger configuration
 const swaggerOptions = {
   definition: {
     openapi: '3.0.0',
@@ -98,20 +89,18 @@ const swaggerOptions = {
       }
     ]
   },
-  apis: ['./routes/*.js'], // Path to the API files
+  apis: ['./routes/*.js']
 };
 
 const swaggerSpec = swaggerJsdoc(swaggerOptions);
 
-// Global middleware
-
-// Security middleware
+// Security headers (CSP disabled for Swagger UI compatibility)
 app.use(helmet({
-  contentSecurityPolicy: false, // Disable CSP for Swagger UI
+  contentSecurityPolicy: false,
   crossOriginEmbedderPolicy: false
 }));
 
-// CORS configuration
+// CORS - stricter origins in production
 app.use(cors({
   origin: NODE_ENV === 'production' ? CORS_ORIGINS : true,
   credentials: true,
@@ -127,14 +116,13 @@ app.use(cors({
 
 }));
 
-// Compression
 app.use(compression());
 
-// Body parsing
+// Parse JSON payloads up to 10MB
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 
-// Request logging
+// Request logging - structured in production, dev-friendly locally
 if (NODE_ENV === 'production') {
   app.use(morgan('combined', {
     stream: { write: (message) => logger.info(message.trim()) }
@@ -143,10 +131,10 @@ if (NODE_ENV === 'production') {
   app.use(morgan('dev'));
 }
 
-// Rate limiting
+// Rate limiting - 100 requests per 15 minutes by default
 const limiter = rateLimit({
-  windowMs: parseInt(process.env.RATE_LIMIT_WINDOW_MS) || 15 * 60 * 1000, // 15 minutes
-  max: parseInt(process.env.RATE_LIMIT_MAX_REQUESTS) || 100, // limit each IP to 100 requests per windowMs
+  windowMs: parseInt(process.env.RATE_LIMIT_WINDOW_MS) || 15 * 60 * 1000,
+  max: parseInt(process.env.RATE_LIMIT_MAX_REQUESTS) || 100,
   message: {
     success: false,
     error: 'Too many requests',
@@ -158,7 +146,7 @@ const limiter = rateLimit({
 
 app.use(limiter);
 
-// Swagger documentation
+// API documentation with custom styling
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec, {
   explorer: true,
   customCss: '.swagger-ui .topbar { display: none }',
@@ -169,12 +157,11 @@ app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec, {
   }
 }));
 
-// API Routes
-app.use(`/api/${API_VERSION}/health`, healthRoutes); // Public health check
-app.use(`/api/${API_VERSION}/projects`, validateApiKey, projectRoutes); // Protected projects
-app.use(`/api/${API_VERSION}/contact`, contactRoutes); // Public contact form
+// Routes: health (public), projects (protected), contact (public)
+app.use(`/api/${API_VERSION}/health`, healthRoutes);
+app.use(`/api/${API_VERSION}/projects`, validateApiKey, projectRoutes);
+app.use(`/api/${API_VERSION}/contact`, contactRoutes);
 
-// Root endpoint
 app.get('/', (req, res) => {
   res.json({
     message: '🚀 CV API Microservice',
@@ -190,7 +177,6 @@ app.get('/', (req, res) => {
   });
 });
 
-// API info endpoint
 app.get(`/api/${API_VERSION}`, (req, res) => {
   res.json({
     name: 'CV API Microservice',
@@ -206,7 +192,7 @@ app.get(`/api/${API_VERSION}`, (req, res) => {
   });
 });
 
-// 404 handler
+// Handle 404s with helpful error response
 app.use('*', (req, res) => {
   logger.warn(`404 - Route not found: ${req.method} ${req.originalUrl}`);
   res.status(404).json({
@@ -222,7 +208,7 @@ app.use('*', (req, res) => {
   });
 });
 
-// Global error handler
+// Global error handler with detailed logging
 app.use((err, req, res, next) => {
   logger.logError(err, {
     route: req.originalUrl,
@@ -231,7 +217,7 @@ app.use((err, req, res, next) => {
     userAgent: req.get('User-Agent')
   });
 
-  // Handle specific error types
+  // Handle common error types
   if (err.type === 'entity.parse.failed') {
     return res.status(400).json({
       success: false,
@@ -248,7 +234,7 @@ app.use((err, req, res, next) => {
     });
   }
 
-  // Default error response
+  // Generic error response - hide details in production
   res.status(err.status || 500).json({
     success: false,
     error: 'Internal server error',
@@ -257,7 +243,7 @@ app.use((err, req, res, next) => {
   });
 });
 
-// Graceful shutdown handler
+// Graceful shutdown with 30s timeout
 const gracefulShutdown = (signal) => {
   logger.info(`Received ${signal}, shutting down gracefully...`);
   
@@ -266,26 +252,23 @@ const gracefulShutdown = (signal) => {
     process.exit(0);
   });
 
-  // Force close after 30 seconds
   setTimeout(() => {
     logger.error('Could not close connections in time, forcefully shutting down');
     process.exit(1);
   }, 30000);
 };
 
-// Initialize server
+// Server initialization with dependency checks
 async function initializeServer() {
   try {
     logger.info('🚀 Starting CV API Microservice...');
     
-    // Test database connection
     logger.info('📊 Testing database connection...');
     const dbConnected = await testConnection();
     if (!dbConnected) {
       throw new Error('Database connection failed');
     }
 
-    // Verify email configuration
     logger.info('📧 Verifying email configuration...');
     const emailConfigured = await verifyEmailConfig();
     if (!emailConfigured) {
@@ -300,7 +283,6 @@ async function initializeServer() {
   }
 }
 
-// Start server
 const server = app.listen(PORT, async () => {
   await initializeServer();
   
@@ -320,7 +302,7 @@ const server = app.listen(PORT, async () => {
   }
 });
 
-// Handle uncaught exceptions
+// Process error handling
 process.on('uncaughtException', (err) => {
   logger.error('Uncaught Exception:', err);
   process.exit(1);
@@ -331,7 +313,7 @@ process.on('unhandledRejection', (reason, promise) => {
   process.exit(1);
 });
 
-// Handle graceful shutdown signals
+// Graceful shutdown on SIGTERM/SIGINT
 process.on('SIGTERM', () => gracefulShutdown('SIGTERM'));
 process.on('SIGINT', () => gracefulShutdown('SIGINT'));
 
