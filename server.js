@@ -45,8 +45,6 @@ const swaggerOptions = {
       version: '1.0.0',
       description: `A comprehensive API for managing CV website projects and contact messages.
       
-**Authentication:**
-Protected endpoints require an API key. Click the "Authorize" button below and enter: \`MICROSERVICE-API-KEY\`
 
 **Health endpoints** are public and do not require authentication.
 **Contact endpoints** are public for form submissions.
@@ -123,7 +121,7 @@ app.use(cors({
         'Content-Type', 
         'Accept', 
         'Authorization',
-        'x-api-key'  // ← ADD THIS LINE!
+        'x-api-key'  
     ],
     methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS']
 
