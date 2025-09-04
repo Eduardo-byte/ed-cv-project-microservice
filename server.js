@@ -90,7 +90,7 @@ Protected endpoints require an API key. Click the "Authorize" button below and e
           type: 'apiKey',
           in: 'header',
           name: 'x-api-key',
-          description: 'API Key for accessing protected endpoints. Use: MICROSERVICE-API-KEY'
+          description: 'API Key for accessing protected endpoints.'
         }
       }
     },
