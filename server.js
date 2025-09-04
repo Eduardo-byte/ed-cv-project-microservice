@@ -66,7 +66,7 @@ Protected endpoints require an API key. Click the "Authorize" button below and e
         description: 'Development server'
       },
       {
-        url: `/api/${API_VERSION}`,
+        url: `https://ed-cv-project-microservice.onrender.com/api/${API_VERSION}`,
         description: 'Production server'
       }
     ],
