@@ -108,8 +108,16 @@ app.use(helmet({
 app.use(cors({
   origin: NODE_ENV === 'production' ? CORS_ORIGINS : true,
   credentials: true,
-  methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With']
+  allowedHeaders: [
+        'Origin', 
+        'X-Requested-With', 
+        'Content-Type', 
+        'Accept', 
+        'Authorization',
+        'x-api-key'  // ← ADD THIS LINE!
+    ],
+    methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS']
+
 }));
 
 // Compression

@@ -11,7 +11,9 @@ dotenv.config();
 export const validateApiKey = (req, res, next) => {
   try {
     const apiKey = req.headers['x-api-key'] || req.query.apikey;
+    console.log('apiKey', apiKey);
     const validApiKey = process.env.API_KEY;
+    console.log('validApiKey', validApiKey);
 
     if (!validApiKey) {
       logger.error('API_KEY not configured in environment variables');
@@ -21,7 +23,7 @@ export const validateApiKey = (req, res, next) => {
         message: 'API key validation not properly configured'
       });
     }
-
+    console.log('apiKey', apiKey);
     if (!apiKey) {
       logger.warn('API key missing in request', {
         ip: req.ip,

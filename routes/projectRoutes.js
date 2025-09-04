@@ -165,7 +165,7 @@ const projectService = new ProjectService();
  */
 router.get('/', async (req, res) => {
   const startTime = Date.now();
-  
+  console.log("GET /api/v1/projects");
   try {
     logger.info('GET /api/v1/projects', { query: req.query });
 
