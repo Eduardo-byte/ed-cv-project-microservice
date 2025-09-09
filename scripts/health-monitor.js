@@ -11,8 +11,8 @@ const HEALTH_URL = process.env.APP_URL
 if (HEALTH_URL) {
   const env = process.env.NODE_ENV || 'development';
   
-  // Run every 5 minutes for health monitoring
-  cron.schedule('*/10 * * * * ', async () => {
+  // Run every 1 hour for health monitoring
+  cron.schedule('0 * * * *', async () => {
     try {
       const response = await fetch(HEALTH_URL);
       if (response.ok) {
